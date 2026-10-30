@@ -60,13 +60,13 @@ An object exists for one span of its Scene, its lifetime:
 - it ends where its latest Action with stage `out` ends; with none, at the end of its `range`; with neither, at the Scene's end;
 - a child's lifetime is cut to its Frame's.
 
-Outside its lifetime an object is hidden and its Actions do nothing.
+Outside its lifetime an object is hidden, but its Actions still run, as in After Effects: a key before it appears or after it leaves plays there, and what follows the object (a mark anchored to it, a camera that looks at it) sees that pose.
 
-Inside the lifetime, each property shows its design value as changed by the Actions that write it:
+At every frame, each property shows its design value as changed by the Actions that write it:
 
 - before an Action starts, it writes nothing; Draw and Erase are the exception and hold their first key, so a line that draws from nothing stays hidden until its Draw starts;
 - while it runs, its keys play;
-- after it ends, its After decides: `hold` keeps its last value, `release` returns the property to its design value. It is one value per Action, which an agent writes as `persistence` on every facet; `setMotionWritePersistence` changes it later on an Action that writes properties. Draw, Erase, Follow Path and Morph always hold.
+- after it ends, its After decides: `hold` keeps its last value, `release` returns the property to its design value. It is one value per Action, which an agent writes as `persistence` on every facet; `setMotionWritePersistence` changes it later on any Action with a duration. Draw, Erase, Follow Path and Morph hold unless set to `release`, which brings back the whole stroke, the follower's own place or the outline the Morph started from.
 
 So an entrance is an Action with stage `in` whose first keys are where the object comes from (transparent, offset, small) and whose last keys are its design state, held. An exit is an Action with stage `out`: the object is gone when it ends. Events last: after `hide` an object stays hidden until a `show`, and after `changeText` the new text stays until the next change.
 
@@ -80,23 +80,25 @@ Each facet composes onto its property in one of three ways, fixed by the catalog
 - multiply: Scale multiplies the design scale, so two Scales multiply;
 - replace: Opacity, Background Opacity, Color, Stroke, Shadow, the blurs, Corner Radius, Letter Spacing, Line Height, Font Weight, Content Offset, Layout Spacing and the camera's Actions replace the value.
 
-At one frame a property is the winning replace (or the design value when no replace writes), multiplied by the factors and with the offsets added; an expression block can also clamp the result to a minimum or a maximum. When one channel mixes factors and offsets in expression blocks, a factor listed before the channel's first offset scales the replace and one listed after it scales the sum. Where several replacing Actions write at once, the one later in the Scene's list of Actions wins. The list decides, not time: an Action that has ended and holds still writes, so it beats an earlier-listed Action that runs after it. `reorderMotionBlock` changes the order.
+At one frame a property is the winning replace (or the design value when no replace writes), multiplied by the factors and with the offsets added; an expression block can also clamp the result to a minimum or a maximum. When one channel mixes factors and offsets in expression blocks, a factor listed before the channel's first offset scales the replace and one listed after it scales the sum. Where several replacing Actions write at once, one that runs beats one that has ended and holds; of two that hold, the one that ended last wins; of two that run, the one later in the Scene's list of Actions (`reorderMotionBlock` changes the order).
 
-Draw and Erase on one Path combine by time instead: a running one beats a held one, and two running together on the same trails show only what both keep, which is how a Draw plus a reverse Erase makes a travelling stroke. A Follow Path owns the follower's position (and its rotation when oriented) from its start and, because it holds, on until the follower's lifetime ends: no other Action may write those channels in that time, its guide must live as long, and the object takes no second Follow Path in that lifetime.
+Draw and Erase on one Path combine by time instead: on the same trails a running one beats a held one, and two running together show only what both keep, which is how a Draw plus a reverse Erase makes a travelling stroke. Where their trails differ, each trail shows only the winner among those naming it (the later-listed one when both run), so an Erase on one of a Draw's trails erases it; a trail none names keeps its whole stroke. A Follow Path places the follower on its guide (and turns it when oriented) from its start until the follower's lifetime ends, or until its own end when its After is `release`, and its guide must live as long. The follower's own x, y and rotation motion adds to that place, and of two Follow Paths on one follower in the same frames the later one in the Scene's motion order places it.
+
+An Action's influence (`updateMotionBlockInfluence`), from 0 to 1 and held or keyed on its own clock, says how much of it shows: a replace moves the property that fraction of the way from what lies under it to its own value, an offset or a factor counts for that fraction, a Follow Path moves its follower that fraction of the way to its place, and at 0 the Action is as if absent. A colour, a text, a switch, an event, a Draw or Erase and a Morph act whole while influence is above 0. Keying the later of two replacing Actions from 0 to 1 crossfades into it.
 
 A child's properties combine on their own; its Frame's transform and opacity then apply on top.
 
-In Studio, dragging an Action's row within an object's lane changes the order.
+In Studio, dragging an Action's row within an object's lane changes the order, and the Influence field in an Action's Motion panel sets its influence.
 
 ## Text
 
-A Text's content is its words, its style runs (ranges with their own style) and its segments. Segment mode `word` or `letter` splits it into pieces one Action can schedule: an Action on the segment group with a `segmentSchedule` gives each word or letter its own window (stagger, direction, humanize, per-segment overrides) and derives its own duration from them. Segments animate position, opacity, scale, rotation, blur and fill. A caret (`addTextCaret`) follows a letter schedule's typing. A Text must use a family the server lists in `fonts`; section `fontFaces` lists each family's weights.
+A Text's content is its words, its style runs (ranges with their own style) and its segments. Segment mode `word` or `letter` splits it into pieces one Action can schedule: an Action on the segment group with a `segmentSchedule` gives each word or letter its own window (stagger, direction, humanize, per-segment overrides) and derives its own duration from them. Segments animate position, opacity, scale, rotation, blur and fill. A caret (`addTextCaret`) follows a letter schedule's typing. Section `fontFaces` lists the families a Text can use (the library's and the person's My fonts) with each one's look, scripts, weights and size; a family it doesn't list stages as the nearest one it does, and the stage says which. `createMediaUpload` imports a brand's font file into My fonts.
 
 In Studio, a person types on the canvas, and edits the schedule in the inspector and each segment's window on the timeline.
 
 ## Shapes and paths
 
-A shape is a rectangle, an ellipse, a polygon or a star, or custom geometry that Studio's vector editing makes from one. A path is a vector network: vertices and the segments between them, named stroke trails (the routes a stroke follows, which Draw, Erase, Follow Path and brushes address by id), fill loops, and the regions its lines enclose, which can be painted, merged, subtracted or lifted out as a new path (section `path`). A connector is a path anchored to two objects. A network path's stroke takes a treatment (plain, a dynamic wobble, or a brush) and a width profile. A Morph turns the outline of a shape or a network path into another outline over time (section `geometryMorph`).
+A shape is a rectangle, an ellipse, a polygon or a star, or custom geometry that Studio's vector editing makes from one. A path is a vector network: vertices and the segments between them, named stroke trails (the routes a stroke follows, which Draw, Erase, Follow Path and brushes address by id), fill loops, and the regions its lines enclose, which can be painted, merged, subtracted or lifted out as a new path (section `path`). A connector is a path anchored to two objects. A network path's stroke takes a treatment (plain, a dynamic wobble, or a brush) and a width profile; a dry brush can be a project brush that many strokes share by id (`createProjectBrush`), so editing it repaints them all. A Morph turns the outline of a shape or a network path into another outline over time (section `geometryMorph`).
 
 In Studio, the pen and pencil draw paths (section `canvasCreation`), and vector edit mode moves points, paints regions, merges and subtracts.
 
@@ -112,7 +114,7 @@ Effects filter an object's painted pixels after its layer blur and motion blur: 
 
 Blur comes in three kinds: layer blur softens the object itself, background blur softens what shows through a shape or a path, and motion blur (`style.motionBlur`) smears an object's own transform motion over a shutter.
 
-The camera looks at the whole Scene. Its resting pose is set with `setSceneCamera`; camera Actions (`cameraFrame`, `cameraRoll`, `cameraDolly`, `cameraTilt`, `cameraLens`, `cameraFocus`) move it, and `addCameraShot` solves a framing into a Camera Frame Action. The camera is flat (pan, roll and zoom) until a dolly, a tilt or a lens makes it projective; then layers at different depths (`translateZ`) show parallax, and camera focus can blur by depth. Where camera Actions overlap, the later in the Scene's list wins, and a held shot keeps the camera until another takes over (section `camera`).
+The camera looks at the whole Scene. Its resting pose is set with `setSceneCamera`; camera Actions (`cameraFrame`, `cameraRoll`, `cameraDolly`, `cameraTilt`, `cameraLens`, `cameraFocus`) move it, and `addCameraShot` solves a framing into a Camera Frame Action. The camera is flat (pan, roll and zoom) until a dolly, a tilt or a lens makes it projective; then layers at different depths (`translateZ`) show parallax, and camera focus can blur by depth. Where camera Actions play on the same frames, the later in the Scene's list wins, and a held shot keeps the camera until another plays (section `camera`).
 
 In Studio: Use as Mask, and the mask's mode and Invert in the inspector; the Effects section and the Motion Blur card; the Scene camera section, and the Camera lane on the timeline where shots are rows with keys.
 
@@ -144,7 +146,7 @@ In Studio: Use as Mask, and the mask's mode and Invert in the inspector; the Eff
 | Essential Graphics | A block's controls (`updateMotionBlockControls`); a shared curve as a timing style. |
 | Motion path, auto-orient | Move travels in straight lines between keys; a curved path, oriented or not, is Follow Path (`orientToPath`). |
 | Motion blur | Motion blur on the object (`style.motionBlur`), its shutter keyed by the Motion Blur Action; quality for the project with `setMotionBlurQuality`. |
-| Trim paths | Draw and Erase Actions on a network path's stroke trails (`addDrawErase`). |
+| Trim paths | Draw and Erase Actions (`addDrawErase`) on a network path's stroke trails or the route of an anchored Path (a connector, mark or caret). |
 | Merge paths | Merge and Subtract of regions inside one network path (`mergePathRegions`, `subtractPathRegions`); not across separate objects. |
 | Shape layer | Shape objects and network paths. |
 | Repeater | `addRepeater`, in a line or a grid. |

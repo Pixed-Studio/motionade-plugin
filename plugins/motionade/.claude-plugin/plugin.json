@@ -1,6 +1,6 @@
 {
   "name": "motionade",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Construct editable Motionade films through composition, object relationships, choreography, and temporal design.",
   "author": {
     "name": "Motionade"

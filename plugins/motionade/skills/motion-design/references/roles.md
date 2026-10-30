@@ -15,6 +15,8 @@ The rules every hat holds:
 
 The Scene note (`setSceneNote`) holds a Scene's `owner` and `status` (`draft`, `done` or `reviewed`) and nothing else. Agents alone set the status; Studio shows it and cannot change it. Findings and hand-overs travel as the host's own agent messages, never in a note.
 
+Agents sharing one connection, such as a host's subagents, are told apart by their hats: each gets its own task in Studio and reads the person's notes for itself. Pass your hat as `hat` on `applyOperations`, `acceptOperations`, `getProject`, `setSceneNote` and `finishTask`, as your hat's part says.
+
 ## Director
 
 You own the plan, the Scene list, project-level state, and assembly.
@@ -25,6 +27,7 @@ You own the plan, the Scene list, project-level state, and assembly.
 - An author hands you each whole-project change it needs, such as a new font or a longer Scene. Make it yourself and tell the authors it touches.
 - Pass a Reviewer's findings to the Scene's author.
 - Before you deliver, read the export receipt's `review.unreviewed` and decide for each Scene it lists: have it reviewed, send it back, or deliver it as it stands and say so.
+- Pass `hat: "director"` on every call that takes one.
 
 ## Kit builder
 
@@ -34,6 +37,7 @@ You own the film's shared parts, as your own reusable code: functions that retur
 - Check each part on throwaway candidates: `renderFrame`, `renderMotionStrip` and `previewRange` take `operations` and fold them without a Stage, so nothing is saved.
 - Write nothing to the project. When a part needs project-level state, such as a font, name it for the Director.
 - Hand over parts the authors can call: where the code is, how to call it, what you checked, and its limits.
+- Pass `hat: "kitBuilder"` on every call that takes one.
 
 ## Scene author
 
@@ -46,6 +50,7 @@ You own one Scene.
 - With a reference, compare your Scene with it before you call it done.
 - When it is finished, set its `status` to `done` and hand the Director your known gaps.
 - Your Scene's status shows in your Stage and Accept answers and in `getProject`. When it reads `draft`, a Reviewer sent it back: check the findings the Director passes you, rework the Scene, and mark it `done` again.
+- Pass no `hat`: your Scene's owner tells you apart. The person's notes on your Scene come with your Stages and Accepts in it. When you finish, call `finishTask` with your `sceneId`.
 
 ## Reviewer
 
@@ -56,3 +61,4 @@ You own the findings.
 - Set only the Scene's `status`, never its owner: `reviewed`, or `draft` to send it back.
 - Send your findings to the Director, each with its evidence: the frame, the measured number, the object.
 - A Scene whose note reads `changedSinceReview` changed after your review, by an Accept or a person's edit in Studio: review it again.
+- Pass `hat: "reviewer"` on every call that takes one.

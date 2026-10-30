@@ -18,7 +18,7 @@ Every run prints JSON: the receipt, or {ok: false, error: {code, message}}.
 Exit codes: 0 exported and every check that ran passed (status says when some were skipped);
 1 usage; 2 the export failed; 4 Chrome or Edge could not start (not installed, or blocked by a shell sandbox); 5 no playwright-core
 ${PLAYWRIGHT_CORE_MIN} or later; 6 the link expired; 7 the link was refused (not valid, the project changed or
-is gone, a Scene is missing, the project carries flags); 8 the project or browser blocks the
+is gone, a Scene is missing); 8 the project or browser blocks the
 export (characters no font covers, a font that cannot load, media not ready, no encoder);
 9 the file was saved but a receipt check failed; 10 timed out; 11 the link is not https or
 local; 12 the link's server did not serve the export page; 13 the browser crashed; 14 the file

@@ -57,7 +57,7 @@ const LOUDNESS_TOLERANCE_DB = 1;
 /** Sound that stops this long before the picture ends is reported. */
 const SHORT_SOUND_SECONDS = 1;
 
-const LINK_REFUSED = new Set(["invalid_link", "project_not_found", "project_changed", "scene_not_found", "project_carries_flags", "invalid_document", "export_unavailable"]);
+const LINK_REFUSED = new Set(["invalid_link", "project_not_found", "project_changed", "scene_not_found", "invalid_document", "export_unavailable"]);
 const BLOCKED = new Set(["missing_glyphs", "fonts_unavailable", "export_blocked", "browser_cannot_export", "renderer_unavailable"]);
 
 /** The exit code for a failure the export page reported. */
@@ -657,6 +657,9 @@ export function receiptChecks({ page, file, revisionAfter, revisionError = null,
   }
   if (mixed !== null && mixed.firstSoundSeconds === null) warnings.push("The film's sound is silent: nothing above -60 dBFS.");
   if (page.effectFallbacks.length > 0) warnings.push(...page.effectFallbacks.map((fallback) => `Exported as the painter's fallback: ${fallback}`));
+  // An export page older than this script sends no list.
+  if (page.unavailableFonts?.length > 0) warnings.push(`Exported in the default family: ${page.unavailableFonts.join(", ")} did not load.`);
+  if (page.fontPreparationFailure !== undefined) warnings.push(`Exported in the fonts already loaded: font preparation failed (${page.fontPreparationFailure}).`);
   if (inspected === null) {
     skipped.push("picture, fullDecode, soundEncoded, audioCoversPicture, audioInSync, loudnessKept: ffmpeg and ffprobe are not installed. Install ffmpeg to check the file itself.");
     return { checks, warnings, skipped, notRun };

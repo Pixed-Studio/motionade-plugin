@@ -19,6 +19,8 @@ The rules every hat holds:
 
 The Scene note (`setSceneNote`) holds a Scene's `owner` and `status` (`draft`, `done` or `reviewed`) and nothing else. Agents alone set the status; Studio shows it and cannot change it. Findings and hand-overs travel as the host's own agent messages, never in a note.
 
+Agents sharing one connection, such as a host's subagents, are told apart by their hats: each gets its own task in Studio and reads the person's notes for itself. Pass your hat as `hat` on `applyOperations`, `acceptOperations`, `getProject`, `setSceneNote` and `finishTask`, as your hat's part says.
+
 ## Kit builder
 
 You own the film's shared parts, as your own reusable code: functions that return the operations for a recurring component, such as a card, a caption or a camera move, for any Scene and ids.
@@ -27,3 +29,4 @@ You own the film's shared parts, as your own reusable code: functions that retur
 - Check each part on throwaway candidates: `renderFrame`, `renderMotionStrip` and `previewRange` take `operations` and fold them without a Stage, so nothing is saved.
 - Write nothing to the project. When a part needs project-level state, such as a font, name it for the Director.
 - Hand over parts the authors can call: where the code is, how to call it, what you checked, and its limits.
+- Pass `hat: "kitBuilder"` on every call that takes one.

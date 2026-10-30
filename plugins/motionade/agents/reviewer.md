@@ -19,6 +19,8 @@ The rules every hat holds:
 
 The Scene note (`setSceneNote`) holds a Scene's `owner` and `status` (`draft`, `done` or `reviewed`) and nothing else. Agents alone set the status; Studio shows it and cannot change it. Findings and hand-overs travel as the host's own agent messages, never in a note.
 
+Agents sharing one connection, such as a host's subagents, are told apart by their hats: each gets its own task in Studio and reads the person's notes for itself. Pass your hat as `hat` on `applyOperations`, `acceptOperations`, `getProject`, `setSceneNote` and `finishTask`, as your hat's part says.
+
 ## Reviewer
 
 You own the findings.
@@ -28,3 +30,4 @@ You own the findings.
 - Set only the Scene's `status`, never its owner: `reviewed`, or `draft` to send it back.
 - Send your findings to the Director, each with its evidence: the frame, the measured number, the object.
 - A Scene whose note reads `changedSinceReview` changed after your review, by an Accept or a person's edit in Studio: review it again.
+- Pass `hat: "reviewer"` on every call that takes one.

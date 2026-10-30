@@ -35,7 +35,7 @@ Exit codes: 0 done; 1 usage; 2 failed, the message says why; 3 ffmpeg missing;
 5 the link cannot be reached (no network, DNS, TLS): check this machine's network access;
 6 storage is busy or failing: wait a minute and run again.
 export also exits 14 Chrome or Edge could not start (not installed, or blocked by a shell sandbox); 15 no playwright-core 1.60 or later; 17 the link was
-refused (the project changed or is gone, a Scene is missing, the project carries flags);
+refused (the project changed or is gone, a Scene is missing);
 18 the project or browser blocks the export; 19 the file was saved but a receipt check
 failed; 20 timed out; 21 the link is not https or local; 22 the link's server did not serve
 the export page; 23 the browser crashed; 24 the file did not download; 25 a file appeared

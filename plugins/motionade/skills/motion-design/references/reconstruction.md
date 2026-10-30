@@ -23,7 +23,7 @@ Sample every frame around the events you time and around the last visible moveme
 
 Timings from a director or an earlier reading are hypotheses. Whoever builds a shot re-measures its events; errors of several frames and misread mechanisms, such as a pop read as a fade, are common.
 
-Measure colours in settled and in-between frames rather than naming them. Colour interpolation runs in HSLA, so a saturated-to-dark settle usually needs a hue-matched endpoint or a measured intermediate key ([Native authoring](authoring.md#engine-notes)). Measure text through the production layout before placing it. A Text takes only a family the server lists in `fonts`, and nothing adds another yet: when the reference's typeface is not listed, choose the nearest listed family, fit its size and tracking to the reference widths, and tell the person, before you build, which family stands in.
+Measure colours in settled and in-between frames rather than naming them. Colour interpolation runs in HSLA, so a saturated-to-dark settle usually needs a hue-matched endpoint or a measured intermediate key ([Native authoring](authoring.md#engine-notes)). Measure text through the production layout before placing it. A Text takes a family `fontFaces` lists (the library's and the person's My fonts), or one you import from the person's font files ([Media from your own files](authoring.md#media-from-your-own-files)): when the reference's typeface is neither, choose the nearest listed family by x-height and width, fit its size and tracking to the reference widths, and tell the person, before you build, which family stands in.
 
 ## Resolve high-risk representation early
 

@@ -3,6 +3,64 @@
 The `motionade` plugin for Claude Code and Codex. Versions follow Semantic Versioning;
 the plugin is versioned separately from Motionade's Studio.
 
+## 0.1.4 — 2026-10-29
+
+Made for Studio 0.1.4: the skill names tools, operations and fields that Studio 0.1.2 does not
+serve. 0.1.3 was never published, so this release also brings everything in its entry below.
+
+Sign in again once. The plugin's server is now named `motionade`, as the plugin is, so Claude
+Code lists `plugin:motionade:motionade` and Codex signs in with `codex mcp login motionade`.
+After updating, run `/mcp`, choose `plugin:motionade:motionade` and Authenticate, or run
+`codex mcp login motionade`. Tool approvals you gave the old `motion-studio` server ask again
+the first time.
+
+Edit by text. `getProject` with `format: "text"` reads a project, or one object's subtree, one
+line an entity, and `applyOperations` takes changed lines back with their `base`: retime,
+change a key, a word or a style, or move a layer by editing its line. A text write before
+Accept revises the Stage it read. The authoring guide has a section on it.
+
+Finishing, naming and roles. `acceptOperations` takes a short `name` for each change, which
+Studio's Activity tab shows and the person can undo without losing their own history.
+`finishTask` ends a task with a one-line summary, and notes the person leaves in Studio arrive
+as `notesFromPerson`. The four agents of a split film (Director, Kit builder, Reviewer, Scene
+author) pass their `hat`, or a Scene author its `sceneId`, so each has its own task and notes.
+
+Fonts. `listCapabilities({"section":"fontFaces"})` lists the library and the person's My fonts,
+one row per family. A font the library lacks stages as the nearest one, and the answer names it.
+With the person's agreement, a brand font file from their repository goes into My fonts through
+`createMediaUpload`.
+
+Motion. `updateMotionBlockInfluence` sets how much of an Action shows, from 0 to 1. A layer's
+Actions run outside its visible range, as in After Effects, so what follows or looks at it sees
+the pose it has reached. Fewer writes are refused: every hold applies, and a running write wins
+over a held one. The skill suggests putting parts that appear together in one Frame, which the
+person can then move in one drag on Studio's timeline, and names the inspector's Appear and
+Disappear.
+
+Export. `motionade export` no longer refuses a project that carries notes, and warns, rather
+than stops, when a font isn't loaded or a medium isn't ready.
+
+## 0.1.3 — 2026-10-20
+
+Made for Studio 0.1.3: the skill names a tool, operations and fields that Studio 0.1.2 does not
+serve (`addFreehandPath`, `createProjectBrush` and the other project-brush operations, a fully
+specified dry brush, and uploaded tips and grains). Projects saved by Studio 0.1.3 can't be
+opened by an older Studio.
+
+The capability map's brush entries say what an agent can now paint with: a library dry brush
+with overrides of any parameter; a freehand stroke from the points a hand would make, with
+`addFreehandPath`, steadied, fitted and given its pressure as Studio's Pencil does; a project
+brush that many strokes share by `brushId`, so one edit repaints a whole painting; and a dry
+treatment written in full, with a built-in, uploaded or generated tip, flow, pressure and colour
+that change along the stroke, ink that runs dry or pools at the edges, and grain that moves with
+the tip. A Draw can play along the route of a connector, mark or caret.
+
+`medium.md` says that After, `hold` or `release`, now applies to Draw, Erase, Follow Path and
+Morph: `release` brings back the whole stroke, the follower's own place or the outline the Morph
+started from. `authoring.md` says that an anchored Path takes no `trailIds`, and that a stage
+checks each operation against what it adds or changes, with the new timings: 3,642 operations
+painting 1,000 Paths fold in about 9 s.
+
 ## 0.1.2 — 2026-10-16
 
 Made for Studio 0.1.0. Adds the `remake` command: you give it a reference video and what your

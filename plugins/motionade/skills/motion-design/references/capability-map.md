@@ -34,14 +34,14 @@ Start from what the picture needs. Each need lists every construction that serve
 
 **Words on screen**
 - A Text object; size it with `textSizing` (auto width for titles and labels, auto height for paragraphs, fixed for a set box) → `addObject` · sections `fontFaces`, `examples` · `listCapabilities` with no arguments: keys `text`, `fonts`
-  Studio: type on the canvas; font, size, weight, alignment and spacing in the Design panel. Gives up: a family must be one the server lists in `fonts`, and the stage binds the faces a Text uses itself; a character no font covers paints as a box, and `renderFrame` names it.
+  Studio: type on the canvas; font, size, weight, alignment and spacing in the Design panel. Gives up: a family `fontFaces` doesn't list stages as the nearest one it does, and the stage says which; the stage binds the faces a Text uses itself; a character no font covers paints as a box, and `renderFrame` names it.
 
 **A card, a pill, a circle, a polygon or a star**
 - A shape object: rectangle, ellipse, polygon or star → `addObject` · `listCapabilities` with no arguments: keys `shape`, `authoringGuide`
   Studio: drawn with the shape tool; corner radius, fill and stroke in the Design panel; vector editing turns a primitive into custom geometry. Gives up: a shape's custom geometry is made in Studio; for a custom outline, draw a network Path. A shape's stroke sits inside its box; shapes cannot be drawn on or guide a Follow Path (use a network Path). In a project made before the empty-fill default, a shape with no fill paints black, so a stroke-only shape there takes a fully transparent fill (the overview's fill guide says how to tell).
 
 **A freeform line or outline**
-- A network Path: straight segments with `addPath`, curves and several contours with `addVectorNetwork`, a later redraw with `replaceVectorNetwork` → `addPath`, `addVectorNetwork`, `replaceVectorNetwork` · sections `path`, `canvasCreation` · tool `inspectPathRegions`
+- A network Path: straight segments with `addPath`, a hand-drawn line from sampled points with `addFreehandPath`, curves and several contours with `addVectorNetwork`, a later redraw with `replaceVectorNetwork` → `addPath`, `addFreehandPath`, `addVectorNetwork`, `replaceVectorNetwork` · sections `path`, `canvasCreation` · tool `inspectPathRegions`
   Studio: the pen and pencil tools and vector editing work on the same network. Gives up: every stroke trail needs a name; raw SVG path data is never authored. Resizing a network Path with `updateObjectBase` scales its geometry and keeps its stroke width.
 
 **A photo, a screenshot or a clip**
@@ -54,7 +54,7 @@ Start from what the picture needs. Each need lists every construction that serve
 
 **A row or column that spaces and reflows its items**
 - Auto layout on a Frame: direction, gap, padding, alignment, wrap; each child hugs, fills or stays fixed → `setAutoLayout`, `setLayoutSizing`, `updateObjectBase` · section `autoLayout`
-  Studio: the Auto layout section of the Frame inspector, and each child's layout sizing. Gives up: a flow Frame places its flow children itself, from their design boxes: a child's Scale or Rotation does not make room. There is no grid mode, and changes between hug, fixed and fill are hard cuts.
+  Studio: the Auto layout section of the Frame inspector, and each child's layout sizing. Gives up: a flow Frame places its flow children: a fixed child's animated width and height make room, its Scale and Rotation do not. There is no grid mode, and switching hug, fixed and fill is a hard cut.
 - Absolute children placed by hand in a plain Frame → `updateObjectBase`
   Gives up: nothing reflows when an item changes size.
 
@@ -74,7 +74,7 @@ Start from what the picture needs. Each need lists every construction that serve
 
 **Travel along a curve: an arc, an orbit, a cursor gliding to a target**
 - Follow Path along a guide Path, which may have no stroke → `addFollowPath`, `updateFollowPathActionSettings` · Action `followPath` · section `path`
-  Studio: guide, trail, direction, orient to path, progress from and to, offsets and timing. Gives up: a Follow holds after it ends, so it owns the follower's x and y (and rotation when oriented) from its start until the follower's lifetime ends, its guide (a network Path in the same Scene) must live that long, and the follower takes no second Follow Path in that lifetime: put other motion on a parent Frame, and change paths by handing over to another object. 3D on either chain below their shared parent, a warp or a Repeater anywhere on either chain, or a zero scale is refused.
+  Studio: guide, trail, direction, orient to path, progress from and to, offsets and timing. Gives up: a Follow holds after it ends, so it places the follower from its start until the follower's lifetime ends, and its guide (a network Path in the same Scene) must live that long; the follower's own Move or Rotation adds to its place on the path, and a later Follow Path on it in the same frames takes over. 3D on either chain below their shared parent, a warp or a Repeater anywhere on either chain, or a zero scale is refused.
 - Several Move keys → Action `move`
   Gives up: straight chords between keys: a polygon, not a curve.
 - Rotate a parent Frame about a pivot (`originX`, `originY`) with the object as its child → Action `rotation`
@@ -118,7 +118,7 @@ Start from what the picture needs. Each need lists every construction that serve
 
 **Type that tracks out, opens up or gets heavier**
 - Letter Spacing, Line Height and Font Weight Actions on a whole Text → Actions `letterSpacing`, `lineHeight`, `fontWeight`
-  Gives up: whole object only. Weight moves continuously on a family with `variable` in `fontFaces` and steps between faces on others, which the stage warns about.
+  Gives up: whole object only. Weight moves continuously on a family `fontFaces` marks variable and steps between faces on others, which the stage warns about.
 
 **A shadow that lifts or moves**
 - A Shadow Action, created or adopted from a drop shadow with `materializeShadowFacet`; `updateShadowStaticFacet` changes its static values and `makeShadowActionStatic` makes it still again → `materializeShadowFacet`, `updateShadowStaticFacet`, `makeShadowActionStatic` · Action `shadow` · tool `getSceneAuthoringContext`
@@ -127,7 +127,7 @@ Start from what the picture needs. Each need lists every construction that serve
 
 **A value computed from a formula: a sway, a pulse, per-copy maths, a channel no Action drives**
 - An expression block: values from time ramps, springs, controls and arithmetic (add, subtract, multiply, divide, sin, cos, clamp, lerp), on channels such as skew, origin, brightness, hue, `clip.progress` and `mask.inset` → `addMotionBlock`, `updateMotionBlockControls`, `updateMotionBlockRange`, `addPrimitive`, `removePrimitive`, `updatePrimitive` · section `objectProperties` · `listCapabilities` with no arguments: keys `primitiveKinds`, `interpolateEasing`, `controlValueShapes`
-  Studio: its controls and its range; Studio lists what the program writes but changes it only through the controls. Gives up: it must expose at least one number or colour control its program reads; there is no noise, random, wiggle or loop function.
+  Studio: its controls and its range; Studio changes it through the controls, or Convert to keyframes turns one property into keys. Gives up: it must expose at least one number or colour control its program reads; there is no noise, random, wiggle or loop function.
 
 ## Timing and feel
 
@@ -151,7 +151,7 @@ Start from what the picture needs. Each need lists every construction that serve
 
 **A cast of different items arriving in order**
 - One Action per member joined in a stagger group: delay and order (forward, reverse, center-out) in one place → `addStaggerGroup`, `updateStaggerGroup`, `removeStaggerGroup`
-  Studio: Stagger Actions groups a multi-selection; delay and order are edited in one place. Gives up: members must not carry sequencing.
+  Studio: Stagger… spaces selected bars or rows once; on exactly a group's members, retunes it. Gives up: members must not carry sequencing.
 - Identical copies with a Copies stagger (see Repeater) → `addRepeater`, `updateMotionBlockRepeaterStagger` · section `repeater`
 
 **Several Actions of one object moved and named as one unit**
@@ -162,9 +162,9 @@ Start from what the picture needs. Each need lists every construction that serve
 
 **Appear at a moment, leave at a moment**
 - Give the first entrance Action the stage `in` and the exit the stage `out`: the object exists from the entrance's start to the exit's end → `materializeActionFacets`, `updateMotionBlockStage` · section `actions`
-  Studio: the object's lifetime bar on the timeline follows its In and Out Actions.
+  Studio: Appear and Disappear in the inspector follow its In and Out Actions.
 - A lifetime `range` for an object with no entrance or exit animation → `setObjectRange`
-  Studio: Lifetime start and end in the inspector, or the whole Scene. Gives up: an In or Out Action's stage overrides the matching end. Hiding with base opacity 0 is not a lifetime.
+  Studio: Appear and Disappear in the inspector, or the whole Scene. Gives up: an In or Out Action's stage overrides the matching end. Hiding with base opacity 0 is not a lifetime.
 
 **Stay put after moving, or snap back**
 - An Action's After: `hold` keeps its last value, `release` returns to the design value → `setMotionWritePersistence` · `listCapabilities` with no arguments: key `persistence`
@@ -202,8 +202,8 @@ Start from what the picture needs. Each need lists every construction that serve
 ## Lines and strokes
 
 **An ink stroke that draws on; a line that draws itself**
-- A Draw Action on a network Path's named trails, over any frame range → `addDrawErase`, `updateDrawEraseActionSettings` · Action `draw` · section `path`
-  Studio: route (trails and their order), direction, range, start point and duration. Gives up: the Path needs a visible stroke; shapes and connectors cannot be drawn on.
+- A Draw Action on a network Path's named trails or the route of an anchored Path (a connector, mark or caret), over any frame range → `addDrawErase`, `updateDrawEraseActionSettings` · Action `draw` · section `path`
+  Studio: route (trails and their order), direction, range, start point and duration. Gives up: the Path needs a visible stroke; shapes cannot be drawn on. An anchored Path's route is its own until it is detached to a vector.
 - `drawOn` on a new `addPath` → `addPath`
   Gives up: it always starts at frame 0 with a short ramp; use a Draw for a timed one.
 - A preset that adds a drawn stroke to an object: `underline-draw`, `doodle-stroke`, `arc-sweep`, `checkbox-draw` → `applyPreset` · section `presets`
@@ -213,10 +213,14 @@ Start from what the picture needs. Each need lists every construction that serve
 - An Erase Action; a Draw plus an overlapping Erase in the reverse direction on the same trails make a travelling stroke (the Draw moves the head, the Erase the tail) → `addDrawErase` · Actions `erase`, `draw`
 
 **A brush, marker, chalk or hand-drawn stroke**
-- A brush from the library: six stretch, six scatter and four dry brushes → `applyPathBrushPreset` · section `path` · tool `listBrushLibrary`
+- A brush from the library: six stretch, six scatter and four dry brushes; a dry one takes overrides of any parameter → `applyPathBrushPreset` · section `path` · tool `listBrushLibrary`
   Studio: brush parameters; a seed can be re-rolled. Gives up: single-contour, single-trail network Paths.
-- A stroke treatment: dynamic wobble, or a stretch or scatter brush from your own vector source → `setPathStrokeTreatment` · section `path`
-  Gives up: dashes work only on a basic uniform stroke; dry brushes come only from the library.
+- A freehand stroke from the points a hand would make, steadied, fitted and given its pressure as Studio's Pencil does (a dry brush's pressure profile, or a Width Profile), its brush named in the same call → `addFreehandPath` · tool `listBrushLibrary`
+  Studio: the Pencil's own Path: its points, brush and pressure. Gives up: at most 16,384 points and 32,768 px a stroke; one of 8 or more points, 24 px or longer, ending within 10 px of its start closes unless close is "never".
+- A project brush: a named dry recipe many strokes share by brushId, each with its own seed and overrides, so one edit repaints a whole painting → `createProjectBrush`, `applyPathBrushPreset`, `setProjectBrushRecipe`, `renameProjectBrush`, `deleteProjectBrush` · section `path` · tool `listBrushLibrary`
+  Studio: the Brush Library lists Project brushes first; Edit brush changes every stroke using it; a stroke's own changes show a dot with Reset to brush. Gives up: dry brushes only; Multiply needs every stroke using it free of Fills, region paints and opacity below 1.
+- A stroke treatment: dynamic wobble, a stretch or scatter brush from your own vector source, or a fully specified dry brush: a built-in or uploaded tip or a generated one (round or flat, bristles, a fixed nib angle); flow, pressure and colour varying along the stroke; ink that runs dry in streaks or pools at the edges; paper or tip grain → `setPathStrokeTreatment` · section `path` · tools `listBrushLibrary`, `createMediaUpload`
+  Studio: the tip and grain pickers have an Uploaded tab. Gives up: dashes work only on a basic uniform stroke; a dry grain is built in or an uploaded grayscale PNG.
 
 **A stroke that tapers or swells**
 - A width profile: a preset taper or your own points along the stroke → `setPathStrokeWidthProfile` · section `path`
@@ -350,7 +354,7 @@ Start from what the picture needs. Each need lists every construction that serve
 - Move an expression block's range, or a whole group → `updateMotionBlockRange`, `retimeMotionBlockGroup`
 
 **Change one key, add or remove keys**
-- Edit keys by id; batch several on one Action → `insertMotionKey`, `updateMotionKey`, `removeMotionKey`, `updateMotionKeyBatch` · `listCapabilities` with no arguments: key `authoringGuide`
+- Edit keys by id; batch several on one block → `insertMotionKey`, `updateMotionKey`, `removeMotionKey`, `updateMotionKeyBatch` · `listCapabilities` with no arguments: key `authoringGuide`
   Studio: key markers on the timeline; key values in the inspector. Gives up: prefer these to swapping a whole primitive.
 
 **Give an existing Action another property**
@@ -373,11 +377,11 @@ Start from what the picture needs. Each need lists every construction that serve
 ## Working with a project and seeing the result
 
 **Find, open or start a project**
-- List projects, read one, create one, open it in Studio for a person → tools `listProjects`, `getProject`, `createProject`, `openEditor`
+- List projects, read one, create one, open it in Studio for a person → section `textView` · tools `listProjects`, `getProject`, `createProject`, `openEditor`
 
 **Make a change and keep it**
-- Read each kind's exact input with `listCapabilities` and `kinds`, stage the operations, inspect the candidate, then accept or discard it → sections `operations`, `examples` · `listCapabilities` with no arguments: key `externalAuthoring` · tools `applyOperations`, `acceptOperations`, `discardOperations`
-  Gives up: a stage lives 30 minutes, or until what its `scope` covers (one Scene or the project) changes or a newer stage of the same scope replaces it.
+- Read each kind's exact input with `listCapabilities` and `kinds`, stage the operations, inspect the candidate, then accept or discard it → sections `operations`, `examples` · `listCapabilities` with no arguments: key `externalAuthoring` · tools `applyOperations`, `acceptOperations`, `discardOperations`, `finishTask`
+  Gives up: a stage lives 30 minutes, or until its `scope` (one Scene or the project) changes or a newer stage of that scope replaces it.
 - A large batch your own code wrote, such as a whole Scene or many keys, sent as a file so its bytes never pass through the conversation: upload it, then pass the answer's ref as `operationsRef` in place of `operations` → tool `createOperationsUpload` · plugin command `motionade send`
   Gives up: the same checks and batch budgets as inline operations, so a film still goes in several stages; an upload is kept for an hour. Small edits stay inline.
 
@@ -403,6 +407,7 @@ A capability's existence is never a reason to use it; the moment decides. Exact 
 
 - **Prefer what the designer can adjust.** Catalog Actions created with `materializeActionFacets` are fully editable in Studio. Studio also edits Scale key values on text segments and Repeater targets. Some other routes arrive locked or partly adjustable; the index above names them. When two constructions deliver the moment, choose the one whose handles match the edit the brief predicts.
 - **Put shared decisions in one place.** Shared timing in a stagger group or timing style; shared travel on an owner Frame; shared depth in the camera. One edit then retunes the whole relationship.
+- **Group what appears together.** The parts of one appearance (a bullet's dot, line and text; a card and its label) go in one Frame. Studio's timeline row for that Frame moves the appearance as one, stagger kept, so a person retimes it in one drag.
 - **Author each Action whole.** Give an Action every facet it needs at creation; adding one later (`materializeActionFacets` in `reuse` mode) needs the Action's `expectedActionFingerprint`, which `getSceneAuthoringContext` serves in `cas.actionFacets`. To change copy later, use `replaceTextSnapshot` with the snapshot fingerprint `getSceneAuthoringContext` serves in `cas.textSnapshots`; it keeps the Text's motion.
 - **Set a style key only where it paints.** `listCapabilities` section `objectProperties` lists each key's kinds in `appliesTo`. Set on any other kind, the key paints nothing, and the stage warns `property_not_applicable`.
 - **Approximate honestly.** When the brief asks for something the engine lacks, build the nearest honest construction and say what differs. The index marks what the medium does not have, and [How Motionade works](medium.md) maps After Effects words to what exists here.

@@ -23,7 +23,7 @@ When the subject, the brand or what the product does is unclear, or there is too
 
 When the reference shows photographs, footage or illustrations, tell the person which ones and ask where theirs should come from: their site, social accounts, videos or repository, files they send, generated images, or native shapes instead. Ask even when they did not mention pictures; many people only notice the question here. Upload what they choose as [Native authoring](authoring.md#media-from-your-own-files) says.
 
-A Text takes only a family the server lists in `fonts`. When the brand's typeface is not listed, choose the nearest listed family and say which one stands in.
+A Text takes a family `listCapabilities({"section":"fontFaces"})` lists: the library's and the person's My fonts. When the brand's typeface is not listed, import its font files if the repository has them ([Media from your own files](authoring.md#media-from-your-own-files)); otherwise choose the nearest listed family by its tags, x-height and width, and say which one stands in.
 
 ## Map roles, not pixels
 

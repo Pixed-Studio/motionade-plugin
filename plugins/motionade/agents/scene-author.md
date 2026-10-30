@@ -19,6 +19,8 @@ The rules every hat holds:
 
 The Scene note (`setSceneNote`) holds a Scene's `owner` and `status` (`draft`, `done` or `reviewed`) and nothing else. Agents alone set the status; Studio shows it and cannot change it. Findings and hand-overs travel as the host's own agent messages, never in a note.
 
+Agents sharing one connection, such as a host's subagents, are told apart by their hats: each gets its own task in Studio and reads the person's notes for itself. Pass your hat as `hat` on `applyOperations`, `acceptOperations`, `getProject`, `setSceneNote` and `finishTask`, as your hat's part says.
+
 ## Scene author
 
 You own one Scene.
@@ -30,3 +32,4 @@ You own one Scene.
 - With a reference, compare your Scene with it before you call it done.
 - When it is finished, set its `status` to `done` and hand the Director your known gaps.
 - Your Scene's status shows in your Stage and Accept answers and in `getProject`. When it reads `draft`, a Reviewer sent it back: check the findings the Director passes you, rework the Scene, and mark it `done` again.
+- Pass no `hat`: your Scene's owner tells you apart. The person's notes on your Scene come with your Stages and Accepts in it. When you finish, call `finishTask` with your `sceneId`.

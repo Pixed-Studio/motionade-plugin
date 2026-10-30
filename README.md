@@ -21,7 +21,7 @@ Needs Claude Code 2.1.287 or later. In a session:
 /plugin install motionade@motionade
 ```
 
-Then run `/mcp`, choose `plugin:motionade:motion-studio`, and choose **Authenticate**. Your
+Then run `/mcp`, choose `plugin:motionade:motionade`, and choose **Authenticate**. Your
 browser opens Motionade's sign-in and asks you to approve the connection.
 
 ### Codex
@@ -31,7 +31,7 @@ Needs Codex 0.158 or later. In a terminal:
 ```
 codex plugin marketplace add zhongth/motionade-plugin
 codex plugin add motionade@motionade
-codex mcp login motion-studio
+codex mcp login motionade
 ```
 
 The last command opens Motionade's sign-in in your browser and asks you to approve the

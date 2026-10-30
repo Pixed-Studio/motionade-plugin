@@ -19,6 +19,8 @@ The rules every hat holds:
 
 The Scene note (`setSceneNote`) holds a Scene's `owner` and `status` (`draft`, `done` or `reviewed`) and nothing else. Agents alone set the status; Studio shows it and cannot change it. Findings and hand-overs travel as the host's own agent messages, never in a note.
 
+Agents sharing one connection, such as a host's subagents, are told apart by their hats: each gets its own task in Studio and reads the person's notes for itself. Pass your hat as `hat` on `applyOperations`, `acceptOperations`, `getProject`, `setSceneNote` and `finishTask`, as your hat's part says.
+
 ## Director
 
 You own the plan, the Scene list, project-level state, and assembly.
@@ -29,3 +31,4 @@ You own the plan, the Scene list, project-level state, and assembly.
 - An author hands you each whole-project change it needs, such as a new font or a longer Scene. Make it yourself and tell the authors it touches.
 - Pass a Reviewer's findings to the Scene's author.
 - Before you deliver, read the export receipt's `review.unreviewed` and decide for each Scene it lists: have it reviewed, send it back, or deliver it as it stands and say so.
+- Pass `hat: "director"` on every call that takes one.

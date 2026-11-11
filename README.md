@@ -5,7 +5,7 @@ Motionade and teaches it motion design: composition, choreography, timing, and h
 film from native objects and motion. What you get is a project you can open and adjust in
 Motionade Studio, not a rendered file.
 
-Motionade is in private alpha. Signing in needs an invited account.
+Motionade is in Early Alpha and free to use. Sign in or create an account in your browser when prompted.
 
 The plugin uses the proprietary [Motionade Plugin License 1.0](LICENSE) from Pixed Studio LLC.
 Read it before installing or using the plugin; the permissions below are subject to it.

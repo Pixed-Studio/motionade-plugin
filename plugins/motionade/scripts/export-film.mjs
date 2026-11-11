@@ -615,6 +615,11 @@ export function receiptChecks({ page, file, revisionAfter, revisionError = null,
   const blocked = requests.blocked.filter(needs).map(({ url }) => url);
   const failed = requests.failed.filter(needs).map(({ url, reason }) => `${url} (${reason})`);
   checks.everythingLoaded = check(blocked.length === 0 && failed.length === 0, { blocked, failed });
+  // A sound the page could not read exports silent from there, and the film sounds finished: never a pass.
+  // An export page older than this script sends no list.
+  if (page.silencedAudio?.length > 0) {
+    checks.everySoundDecoded = check(false, { silenced: page.silencedAudio, note: "Each of these is silent in the film from where it could not be read." });
+  }
   for (const request of requests.blocked) {
     if (!needs(request)) warnings.push(`Blocked a request the film does not use (${request.type}): ${request.url}`);
   }

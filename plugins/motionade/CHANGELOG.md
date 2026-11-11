@@ -3,6 +3,16 @@
 The `motionade` plugin for Claude Code and Codex. Versions follow Semantic Versioning;
 the plugin is versioned separately from Motionade's Studio.
 
+## 0.1.5 — 2026-11-03
+
+For Studio 0.1.5, and works with 0.1.4. No new sign-in.
+
+Export. `motionade export` fails the receipt when a sound in the film could not be read: the new
+`everySoundDecoded` check names each sound that went silent and why. Before, the film sounded
+finished and passed. The authoring guide says what to do: a codec the browser cannot decode plays
+once it is re-encoded to WAV and uploaded again. Studio 0.1.4 sends no such list, so there the
+check doesn't run.
+
 ## 0.1.4 — 2026-10-29
 
 Made for Studio 0.1.4: the skill names tools, operations and fields that Studio 0.1.2 does not

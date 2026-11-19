@@ -3,12 +3,8 @@
     "motionade": {
       "type": "http",
       "url": "https://studio.motionade.app/api/mcp",
-      "headers": {
-        "X-Motionade-Plugin-Version": "0.1.5",
-        "X-Motionade-Agent-Host": "Claude Code"
-      },
       "http_headers": {
-        "X-Motionade-Plugin-Version": "0.1.5",
+        "X-Motionade-Plugin-Version": "0.1.6",
         "X-Motionade-Agent-Host": "Codex"
       }
     }

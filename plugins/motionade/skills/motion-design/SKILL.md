@@ -9,7 +9,7 @@ Use the brief and current project to design the viewer's experience and construc
 
 ## Start here
 
-Motionade works like After Effects: Scenes of layered objects whose properties change through keyframed Actions, with masks, effects, Shaders and a camera on top. What you build is a project the person opens and adjusts in Studio, Motionade's editor. The tools come from the Motionade MCP server. If your host lists them by name only (Claude Code loads MCP tools through its tool search; Codex lists them in code mode's ALL_TOOLS), load `listCapabilities` and call it before any other tool. Then find what you need in this order:
+Motionade works like After Effects: Scenes of layered objects whose properties change through keyframed Actions, with masks, effects, Shaders and a camera on top. What you build is a project the person opens and adjusts in Studio, Motionade's editor. The tools come from the Motionade MCP server. If your host lists them by name only (Claude Code loads MCP tools through its tool search; Codex lists them in code mode's ALL_TOOLS; Antigravity loads lazy MCP tool schemas before calling them), load `listCapabilities` and call it before any other tool. Then find what you need in this order:
 
 1. `listCapabilities` with no arguments: the overview of the building blocks, and the sections it serves by name.
 2. `listCapabilities({"section":"model"})`: how the medium works. What an object shows before, during and after an Action, how Actions on one property combine, how Frames carry their children, where masks, effects and the camera sit, and an After Effects word list. Read it once before you author; [How Motionade works](references/medium.md) is the same page.

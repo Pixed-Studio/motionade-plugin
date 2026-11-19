@@ -1,9 +1,10 @@
 {
   "name": "motionade",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Construct editable Motionade films through composition, object relationships, choreography, and temporal design.",
   "author": {
     "name": "Motionade"
   },
-  "license": "LicenseRef-Motionade-Plugin-1.0"
+  "license": "LicenseRef-Motionade-Plugin-1.0",
+  "mcpServers": "./.claude-plugin/mcp.json"
 }

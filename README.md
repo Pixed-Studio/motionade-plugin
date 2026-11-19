@@ -1,8 +1,8 @@
 # Motionade plugin
 
-Create and refine motion films from Claude Code or Codex. The plugin connects your agent to
-Motionade and teaches it motion design: composition, choreography, timing, and how to build a
-film from native objects and motion. What you get is a project you can open and adjust in
+Create and refine motion films from Claude Code, Codex, or Antigravity. The plugin connects your
+agent to Motionade and teaches it motion design: composition, choreography, timing, and how to
+build a film from native objects and motion. What you get is a project you can open and adjust in
 Motionade Studio, not a rendered file.
 
 Motionade is in Early Alpha and free to use. Sign in or create an account in your browser when prompted.
@@ -37,6 +37,18 @@ codex mcp login motionade
 The last command opens Motionade's sign-in in your browser and asks you to approve the
 connection.
 
+### Antigravity
+
+Needs Antigravity 1.5.12 or later. In a terminal:
+
+```
+agy plugin install https://github.com/zhongth/motionade-plugin
+```
+
+Then open `/plugin` (or **Customizations → Installed** in the Antigravity app), expand `motionade`,
+and choose **Sign in**. Your browser opens Motionade's sign-in and asks you to approve the
+connection, then shows a code to paste back into Antigravity.
+
 ## Use
 
 Ask for a film in your own words:
@@ -59,6 +71,7 @@ video's path and any notes, such as the part to rebuild:
 
 - Claude Code: `/motionade:reconstruct launch.mp4 only 0:10 to 0:20`
 - Codex: type `$`, choose `motionade:reconstruct`, then add the path and notes.
+- Antigravity: type `/`, choose `reconstruct` under Motionade, then add the path and notes.
 
 The agent rebuilds the video from text, shapes and paths in named groups with keyframed motion,
 the way a motion designer would build it in After Effects, then tells you scene by scene how
@@ -74,6 +87,7 @@ video's path and what your film is for, such as your product's site:
 
 - Claude Code: `/motionade:remake launch.mp4 for our app, site example.com`
 - Codex: type `$`, choose `motionade:remake`, then add the path and notes.
+- Antigravity: type `/`, choose `remake` under Motionade, then add the path and notes.
 
 The agent keeps the video's cuts, timing, rhythm and soundtrack, and tells the story with your
 brand and your product. Run it in your product's repository and it learns your real features,
@@ -88,6 +102,7 @@ Studio link. Like a reconstruction, it needs `ffmpeg` and takes hours for a whol
 - Claude Code: `/plugin marketplace update motionade`. To stay current without asking, open
   `/plugin`, go to **Marketplaces**, choose `motionade`, and choose **Enable auto-update**.
 - Codex: `codex plugin marketplace upgrade`.
+- Antigravity: re-run `agy plugin install https://github.com/zhongth/motionade-plugin`.
 
 ## Disconnect
 

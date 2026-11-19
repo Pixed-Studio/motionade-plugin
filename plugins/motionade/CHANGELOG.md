@@ -1,7 +1,19 @@
 # Plugin changelog
 
-The `motionade` plugin for Claude Code and Codex. Versions follow Semantic Versioning;
+The `motionade` plugin for Claude Code, Codex and Antigravity. Versions follow Semantic Versioning;
 the plugin is versioned separately from Motionade's Studio.
+
+## 0.1.6 — 2026-11-18
+
+For Studio 0.1.6, and works with 0.1.5 and 0.1.4. No new sign-in for Claude Code or Codex.
+
+Antigravity native support. The plugin now ships an Antigravity manifest
+(`.antigravity-plugin/plugin.json`), the Motionade icon (`assets/logo.svg`), starter prompts, and a
+native `mcp_config.json` that identifies the host as `Antigravity`. Claude Code and Codex each read
+their own generated MCP config (`.claude-plugin/mcp.json` and `.codex-plugin/mcp.json`) so all
+three hosts validate strictly with no warnings. Install or update in Antigravity with
+`agy plugin install https://github.com/zhongth/motionade-plugin`, then sign in from `/plugin` or
+**Customizations → Installed**.
 
 ## 0.1.5 — 2026-11-03
 

@@ -1,0 +1,18 @@
+{
+  "name": "motionade",
+  "displayName": "Motionade Motion Design",
+  "version": "0.1.6",
+  "description": "Construct editable Motionade films through composition, object relationships, choreography, and temporal design.",
+  "logo": "assets/logo.svg",
+  "author": {
+    "name": "Motionade"
+  },
+  "homepage": "https://studio.motionade.app",
+  "repository": "https://github.com/zhongth/motionade-plugin",
+  "license": "LicenseRef-Motionade-Plugin-1.0",
+  "suggestedPrompts": [
+    "Create an editable motion film in Motionade",
+    "Make a 10-second product launch video in Motionade",
+    "Revise the timing and choreography of my Motionade project"
+  ]
+}
